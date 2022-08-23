@@ -4,10 +4,12 @@ module.exports = defineConfig({
   devServer: {
     proxy: 'https://localhost:7051/',
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-      "Access-Control-Allow-Headers": "*"
     }
-    }
+  }
 })
+// "Access-Control-Allow-Origin": "ORIGIN",
+// "Access-Control-Allow-Methods": "PUT, GET, HEAD, POST, DELETE, OPTIONS",
+// "Access-Control-Allow-Headers": "*",
+// "Access-Control-Allow-Credentials": "true"
+
 
