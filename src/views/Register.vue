@@ -90,14 +90,11 @@ export default {
                 })
                 const res = await CaffiatoAPI.createUser(JSON.stringify({
                     email: email.value,
-                    name: firstName.value,
-                    username: "",
-                    surname: lastName.value,
+                    firstName: firstName.value,
+                    lastName: lastName.value,
                     dateOfBirth: dateOfBirth.value.toString(),
                     oib: OIB.value.toString(),
-                    points: 0,
-                    caffes: [],
-                    transaction: []
+                    points: 0
                 }))
                 router.push('/')
             } catch (er) {

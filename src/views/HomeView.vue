@@ -16,8 +16,8 @@
     </div>
 
     <div class="content">
-      <div class="caffesList" v-for="caffe in userCaffes" :key="caffe.idcafe">
-        <router-link :to="{ name: 'CaffeBar', params: { idCaffe: caffe.idcafe } }">
+      <div class="caffesList" v-for="caffe in userCaffes" :key="caffe.idcaffe">
+        <router-link :to="{ name: 'CaffeBar', params: { idCaffe: caffe.idcaffe } }">
           <div class="left">
             <h3>
               <span class="material-icons">deck</span>
@@ -117,18 +117,12 @@ export default {
         const resUser = await CaffiatoAPI.getUserByEmail(email.value);
         userCaffes.value = resUser.data.data.caffes
         userId.value = resUser.data.data.iduserCaffe
-
-        // console.log("resdata", resUser.data.data)
-        // console.log("resdata iduser", resUser.data.idUserCaffe)
-        // console.log("userCaffes cafe id", userCaffes.value)
       } catch (error) {
         console.log(error);
       }
     };
 
-
     loadCaffeBars();
-
 
     const toggleModal = () => {
       showModal.value = !showModal.value
@@ -145,16 +139,13 @@ export default {
         const resCaffe = await CaffiatoAPI.createCaffe(JSON.stringify({
           name: name.value,
           userCaffeId: userId.value
-          // dealList: [],
-          // adress: null
         }))
-        console.log("resCaffe", resCaffe.data)
         const resAdress = await CaffiatoAPI.createAdress(JSON.stringify({
           streetNumber: streetNum.value,
           streetName: streetName.value,
           city: city.value,
           postCode: postCode.value,
-          caffeId: resCaffe.data.data.idcafe
+          caffeId: resCaffe.data.data.idcaffe
         }))
         toggleModal()
         router.go()

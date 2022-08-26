@@ -5,7 +5,7 @@
     <aside v-if="user" :class="`${sidebarExpand && 'sidebar-expanded'}`">
 
         <div class="logo mb-3 text-center">
-            <img src="../assets/logo.png" alt="iuk">
+            <img src="../assets/coffee.jpg" alt="iuk">
         </div>
 
         <!-- toggle sidebar -->
@@ -121,7 +121,7 @@ aside {
     .logo {
         margin-bottom: 1rem;
         img {
-            border-radius: 20%;
+            border-radius: 50%;
             width: 2rem;
         }
     }

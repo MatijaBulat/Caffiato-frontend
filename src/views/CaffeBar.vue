@@ -22,8 +22,8 @@
 
     <!-- deal list -->
     <div class="content">
-      <div class="deal" v-for="deal in dealList" :key="deal.idDeal">
-        <div class="deal-wrapper" @click="populateDealInputs(deal.idDeal)">
+      <div class="deal" v-for="deal in dealList" :key="deal.iddeal">
+        <div class="deal-wrapper" @click="populateDealInputs(deal.iddeal)">
           <div class="left">
             <h5>
               <span>{{ deal.name }}</span>
@@ -120,11 +120,12 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <label class="mb-2 text-muted" for="active">Active deal</label>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" v-model="active">
-                  <label class="form-check-label" for="fexSwitchCheckDefault"></label>
-                </div>
+              <label class="mb-2 text-muted" for="active">Active deal</label>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                  v-model="active">
+                <label class="form-check-label" for="fexSwitchCheckDefault"></label>
+              </div>
             </div>
 
             <div class="mt-3" v-if="error">{{ error }}</div>
@@ -171,11 +172,12 @@
             </div>
 
             <div class="d-flex justify-content-between">
-                <label class="mb-2 text-muted" for="active">Active deal</label>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" v-model="active">
-                  <label class="form-check-label" for="fexSwitchCheckDefault"></label>
-                </div>
+              <label class="mb-2 text-muted" for="active">Active deal</label>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                  v-model="active">
+                <label class="form-check-label" for="fexSwitchCheckDefault"></label>
+              </div>
             </div>
 
             <div class="mt-3" v-if="error">{{ error }}</div>
@@ -209,7 +211,7 @@ import Modal from '../components/Modal.vue'
 
 export default {
   name: 'CaffeBar',
-  props: ['idcafe'],
+  props: ['idCaffe'],
   components: { Modal },
   setup(props) {
 
@@ -221,11 +223,11 @@ export default {
 
     //caffe data, caffe dealList - caffe adress
     const caffeBarData = ref('')
-    const idCaffe = ref(props.idcafe)
+    const idCaffe = ref(props.idCaffe)
     const caffeBarName = ref('')
     const userCaffeID = ref('')
     const dealList = ref('')
-    const idAdress = ref('')
+    const idAddress = ref('')
     const streetName = ref('')
     const streetNum = ref('')
     const city = ref('')
@@ -252,25 +254,27 @@ export default {
 
     const loadCaffeData = async () => {
       try {
-        console.log(props.idCafe)
         const res = await CaffiatoAPI.getCaffe(props.idCaffe);
 
-        caffeBarData.value = res.data
-        caffeBarName.value = res.data.name
-        userCaffeID.value = res.data.userCaffeID
-        dealList.value = res.data.dealList
-        idAdress.value = res.data.adress.idAdress
-        streetName.value = res.data.adress.streetName
-        streetNum.value = res.data.adress.streetNumber
-        city.value = res.data.adress.city
-        postCode.value = res.data.adress.postCode
+        caffeBarData.value = res.data.data
+        caffeBarName.value = res.data.data.name
+        userCaffeID.value = res.data.data.userCaffeId
+        dealList.value = res.data.data.deals
+        idAddress.value = res.data.data.addresses[0].idaddress
+        streetName.value = res.data.data.addresses[0].streetName
+        streetNum.value = res.data.data.addresses[0].streetNumber
+        city.value = res.data.data.addresses[0].city
+        postCode.value = res.data.data.addresses[0].postCode
 
-        pageTitle.value = res.data.name
+        pageTitle.value = res.data.data.name
+
+        // console.log(caffeBarData.value)
 
       } catch (error) {
         console.log(error.message)
       }
     }
+
     loadCaffeData()
 
     //toggle modal Edit Caffe
@@ -289,27 +293,29 @@ export default {
     //cancel modals, clear inputs
     const cancelModalEditCaffe = () => {
       toggleModalEditCaffe()
-      caffeBarName.value = caffeBarData.value.name
-      streetName.value = caffeBarData.value.adress.streetName
-      streetNum.value = caffeBarData.value.adress.streetNumber
-      city.value = caffeBarData.value.adress.city
-      postCode.value = caffeBarData.value.adress.postCode
+      // caffeBarName.value = caffeBarData.value.name
+      // streetName.value = caffeBarData.value.address.streetName
+      // streetNum.value = caffeBarData.value.address.streetNumber
+      // city.value = caffeBarData.value.address.city
+      // postCode.value = caffeBarData.value.address.postCode
     }
-    const cancelModalAddDeal = () => {
-      toggleModalAddDeal()
+
+    const resetDealModalInputs = () => {
       dealName.value = ''
       dateTime.value = ''
       points.value = ''
       price.value = ''
       active.value = true
     }
+
+    const cancelModalAddDeal = () => {
+      toggleModalAddDeal();
+      resetDealModalInputs();
+    }
+
     const cancelModalEditDeal = () => {
       toggleModalEditDeal()
-      dealName.value = dealData.value.name
-      dateTime.value = dealData.value.dateTime
-      points.value = dealData.value.points
-      price.value = dealData.value.price
-      active.value = dealData.value.active
+      resetDealModalInputs()
     }
 
     //handle caffe bar edit 
@@ -318,10 +324,10 @@ export default {
         const resCaffe = await CaffiatoAPI.updateCaffe(idCaffe.value, JSON.stringify({
           name: caffeBarName.value,
           userCaffeID: userCaffeID.value,
-          dealList: dealList.value,
-          adress: null
+          deals: dealList.value,
+          address: null
         }));
-        const resAdress = await CaffiatoAPI.updateAdress(idAdress.value, JSON.stringify({
+        const resAdress = await CaffiatoAPI.updateAdress(idAddress.value, JSON.stringify({
           streetNumber: streetNum.value,
           streetName: streetName.value,
           city: city.value,
@@ -369,13 +375,13 @@ export default {
       try {
         const res = await CaffiatoAPI.getDeal(id);
 
-        dealData.value = res.data
-        idDeal.value = res.data.idDeal
-        dealName.value = res.data.name
-        dateTime.value = new Date(res.data.dateTime).toLocaleDateString('en-CA')
-        points.value = res.data.points
-        price.value = res.data.price
-        active.value = res.data.active
+        dealData.value = res.data.data
+        idDeal.value = res.data.data.iddeal
+        dealName.value = res.data.data.name
+        dateTime.value = new Date(res.data.data.dateTime).toLocaleDateString('en-CA')
+        points.value = res.data.data.points
+        price.value = res.data.data.price
+        active.value = res.data.data.active
         //open modal 
         toggleModalEditDeal()
       } catch (er) {
@@ -387,11 +393,11 @@ export default {
     const handleSubmitEditDeal = async () => {
       try {
         const res = await CaffiatoAPI.updateDeal(idDeal.value, JSON.stringify({
+          iddeal: idDeal.value,
           name: dealName.value,
           dateTime: dateTime.value,
           points: points.value,
           price: price.value,
-          caffeID: idCaffe.value,
           active: active.value
         }));
         router.go()
@@ -525,6 +531,7 @@ h5 {
   .active-color {
     color: var(--primary);
   }
+
   .inactive-color {
     color: var(--close);
   }
@@ -534,7 +541,9 @@ h5 {
   background: var(--primary);
 
   h5,
-  .material-icons, .text-danger-test, .text-success-test {
+  .material-icons,
+  .text-danger-test,
+  .text-success-test {
     color: var(--light);
   }
 }
