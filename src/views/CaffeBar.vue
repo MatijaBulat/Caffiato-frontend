@@ -267,9 +267,6 @@ export default {
         postCode.value = res.data.data.addresses[0].postCode
 
         pageTitle.value = res.data.data.name
-
-        // console.log(caffeBarData.value)
-
       } catch (error) {
         console.log(error.message)
       }
@@ -293,11 +290,11 @@ export default {
     //cancel modals, clear inputs
     const cancelModalEditCaffe = () => {
       toggleModalEditCaffe()
-      // caffeBarName.value = caffeBarData.value.name
-      // streetName.value = caffeBarData.value.address.streetName
-      // streetNum.value = caffeBarData.value.address.streetNumber
-      // city.value = caffeBarData.value.address.city
-      // postCode.value = caffeBarData.value.address.postCode
+      caffeBarName.value = caffeBarData.value.name
+      streetName.value = caffeBarData.value.addresses[0].streetName
+      streetNum.value = caffeBarData.value.addresses[0].streetNumber
+      city.value = caffeBarData.value.addresses[0].city
+      postCode.value = caffeBarData.value.addresses[0].postCode
     }
 
     const resetDealModalInputs = () => {
@@ -322,17 +319,16 @@ export default {
     const handleSubmitEditCaffe = async () => {
       try {
         const resCaffe = await CaffiatoAPI.updateCaffe(idCaffe.value, JSON.stringify({
+          idcaffe: idCaffe.value,
           name: caffeBarName.value,
-          userCaffeID: userCaffeID.value,
-          deals: dealList.value,
-          address: null
+          userCaffeID: userCaffeID.value
         }));
         const resAdress = await CaffiatoAPI.updateAdress(idAddress.value, JSON.stringify({
+          idaddress: idAddress.value,
           streetNumber: streetNum.value,
           streetName: streetName.value,
           city: city.value,
-          postCode: postCode.value,
-          caffeId: props.idCaffe
+          postCode: postCode.value
         }));
         router.go()
       } catch (er) {

@@ -20,10 +20,10 @@ export default {
     return API("api/").post("/Caffe", data);
   },
   updateCaffe(id, data) {
-    return API("api/").put(`/Caffe/${id}`, data);
+    return API("api/").put(`/Caffes/${id}`, data);
   },
   deleteCaffe(id) {
-    return API("api/").delete(`/Caffe/${id}`);
+    return API("api/").delete(`/Caffes/${id}`);
   },
 
   //Deal
